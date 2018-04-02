@@ -1,0 +1,81 @@
+{
+  "features": {
+    "num_layers": 6,
+    "layers": [
+      {
+        "name": "Convolution",
+        "parameters": {
+          "in_channels": 3,
+          "out_channels": 8,
+          "kernel_size": 3
+        }
+      },
+      {
+        "name": "MaxPool",
+        "parameters": {
+          "kernel_size": 3
+        }
+      },
+      {
+        "name": "ReLU",
+        "parameters": {}
+      },
+      {
+        "name": "Convolution",
+        "parameters": {
+          "in_channels": 8,
+          "out_channels": 16,
+          "kernel_size": 3
+        }
+      },
+      {
+        "name": "MaxPool",
+        "parameters": {
+          "kernel_size": 2
+        }
+      },
+      {
+        "name": "ReLU",
+        "parameters": {}
+      }
+    ]
+  },
+  "reshape": [-1, 256],
+  "classifier": {
+    "num_layers": 4,
+    "layers": [
+    {
+      "name": "Linear",
+      "parameters": {
+      "in_features": 256,
+      "out_features": 100
+    }
+      },
+      {
+      "name": "ReLU",
+      "parameters": {}
+      },
+      {
+      "name": "Linear",
+      "parameters": {
+        "in_features": 100,
+        "out_features": 10
+      }
+      },
+      {
+      "name": "LogSoftMax",
+      "parameters": {
+        "dim": 1
+      }
+      }
+    ]
+  },
+  "loss": {
+    "name": "NLLLoss",
+    "parameters": {}
+  },
+  "optimizer": {
+    "name": "Adam",
+    "parameters": {}
+  }
+}
