@@ -38,7 +38,7 @@ def empty_log(*_, **__):
 
 
 def convert_model_parameters_to_list(parameters):
-    return list(map(lambda p: p.data.tolist(), parameters))
+    return list(map(lambda p: p.data.numpy().flatten().tolist(), parameters))
 
 
 def parse_model_parameters_from_list(data):

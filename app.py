@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, Response
 
 from model import Model
 
@@ -18,13 +18,16 @@ def fetch_model():
 
 @app.route('/model', methods=['POST'])
 def update_model():
-    model.get_queue().put_nowait(request.get_json())
-    return ''
+    parameters = request.get_json()
+    if model.check_parameters(parameters):
+        model.get_queue().put_nowait(request.get_json())
+        return ''
+    return Response(status=400)
 
 
 @app.route('/status')
 def get_status():
-    now, correct, total = model.test()
+    now, correct, total = model.accuracy
     return render_template('status.html',
                            accuracy='%.2f' % (correct * 100. / total),
                            date=now.strftime('%d-%m-%Y'),
@@ -33,9 +36,16 @@ def get_status():
 
 @app.route('/train')
 def train():
-    model.train()
-    return ''
+    def train_progress():
+        yield 'Request submitted<br/>'
+        model.get_train_queue().put(None)
+        yield 'Waiting for model<br/>'
+        assert model.get_progress_queue().get() == 0
+        yield 'Training<br/>'
+        assert model.get_progress_queue().get() == 1
+        yield 'Training complete<br/>'
+    return Response(train_progress())
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', 1729)
+    app.run('0.0.0.0', 1729, threaded=True)

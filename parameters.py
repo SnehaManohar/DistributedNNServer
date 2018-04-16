@@ -15,10 +15,12 @@ class Parameters:
     train_batch_size = 256
     test_batch_size = 256
 
-    epochs = 0
+    epochs = 1
     log_interval = 10
     verbose_pre_training = True
+    verbose_training_request = True
 
     merge_ratio = 0.1
 
     update_json_time = 10
+    test_model_time = 60
