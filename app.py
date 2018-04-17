@@ -18,10 +18,10 @@ def fetch_model():
 
 @app.route('/model', methods=['POST'])
 def update_model():
-    parameters = eval(request.get_data().decode())['params']
+    parameters = request.get_json()['params']
     if model.check_parameters(parameters):
         model.get_queue().put_nowait(parameters)
-        return ''
+        return jsonify({'status': 'OK'})
     return Response(status=400)
 
 
