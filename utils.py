@@ -1,11 +1,10 @@
 from datetime import datetime
 
 import numpy as np
-from torch import nn
-from torch import optim
+from torch import nn, optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
-from torchvision.datasets import CIFAR10
+from torchvision.datasets import ImageFolder
 
 from parameters import Parameters as P
 
@@ -46,10 +45,7 @@ def parse_model_parameters_from_list(data):
 
 
 def get_data(training_data=True):
-    if P.download:
-        CIFAR10(P.data_dir, download=True)
-        P.download = False
-    return CIFAR10(P.data_dir, transform=P.transform, train=training_data)
+    return ImageFolder(P.train_data if training_data else P.test_data, transform=P.transform)
 
 
 def get_train_data():

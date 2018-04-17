@@ -2,12 +2,15 @@ from torchvision.transforms import transforms
 
 
 class Parameters:
-    data_dir = '~'
-    download = True
+    data_dir = 'data'
+    train_data = data_dir + '/train'
+    test_data = data_dir + '/test'
 
-    image_mean = [0.49139968, 0.48215841, 0.44653091]
-    image_std = [0.24703223, 0.24348513, 0.26158784]
+    image_mean = [0.49842002987861633, 0.45849472284317017, 0.3978663980960846]
+    image_std = [0.31304672360420227, 0.26907557249069214, 0.23163224756717682]
     transform = transforms.Compose([
+        transforms.Resize(32),
+        transforms.CenterCrop(32),
         transforms.ToTensor(),
         transforms.Normalize(image_mean, image_std)
     ])
