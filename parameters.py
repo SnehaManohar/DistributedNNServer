@@ -15,8 +15,8 @@ class Parameters:
         transforms.Normalize(image_mean, image_std)
     ])
 
-    train_batch_size = 256
-    test_batch_size = 256
+    train_batch_size = 32
+    test_batch_size = 32
 
     epochs = 0
     log_interval = 10
