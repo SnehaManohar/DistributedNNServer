@@ -18,7 +18,7 @@ def fetch_model():
 
 @app.route('/model', methods=['POST'])
 def update_model():
-    parameters = request.get_json()
+    parameters = request.get_json()['params']
     if model.check_parameters(parameters):
         model.get_queue().put_nowait(request.get_json())
         return ''
