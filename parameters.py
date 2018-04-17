@@ -15,7 +15,7 @@ class Parameters:
     train_batch_size = 256
     test_batch_size = 256
 
-    epochs = 1
+    epochs = 0
     log_interval = 10
     verbose_pre_training = True
     verbose_training_request = True

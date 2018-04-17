@@ -42,7 +42,7 @@ def convert_model_parameters_to_list(parameters):
 
 
 def parse_model_parameters_from_list(data):
-    return map(np.array, data)
+    return map(lambda x: np.array(x).astype('float'), data)
 
 
 def get_data(training_data=True):
