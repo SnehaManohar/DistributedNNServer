@@ -105,3 +105,4 @@ ENV/
 
 # Data directory
 data/
+params/

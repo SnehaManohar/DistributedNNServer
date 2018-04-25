@@ -4,20 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
   <title>Sonder</title>
-  <link rel="stylesheet" href="static/css/flip.css">
+  <style>
+    @keyframes fill {
+      0% {
+        width: 0%;
+      }
+      100% {
+        width: {{ accuracy }}%;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="../static/css/status.css">
 </head>
 <body>
-<div align="center">
-
-  <div>
-    <small>Obtained</small>
-    {{ accuracy }}%
-    <small>accuracy</small>
+  <div class="wrapper">
+    <div class="container">
+      <div class="label">{{ accuracy }}% ({{ correct }}/{{ total }})</div>
+      <div class="progress-bar">
+        <div class="progress fill">
+          <div class="glow"></div>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div>
-    <small>Last updated at</small> {{time}} <small>on</small> {{date}}
-  </div>
-</div>
 </body>
 </html>

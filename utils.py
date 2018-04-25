@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import numpy as np
+import torch
 from torch import nn, optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
@@ -28,12 +29,12 @@ def create_object(name, parameters):
     return mapping[name](**parameters)
 
 
+def now():
+    return datetime.now().strftime('%Y-%m-%d %I:%M:%S%p')
+
+
 def log(*args, **kwargs):
-    print('[%s]' % (datetime.now().strftime('%Y-%m-%d %I:%M:%S%p')), *args, flush=True, **kwargs)
-
-
-def empty_log(*_, **__):
-    pass
+    print('[%s]' % (now()), *args, flush=True, **kwargs)
 
 
 def convert_model_parameters_to_list(parameters):
@@ -44,40 +45,13 @@ def parse_model_parameters_from_list(data):
     return map(lambda x: np.array(x).astype('float'), data)
 
 
-def get_data(training_data=True):
-    return ImageFolder(P.train_data if training_data else P.test_data, transform=P.transform)
+def get_data():
+    return DataLoader(ImageFolder(P.data_dir, transform=P.transform), batch_size=P.batch_size)
 
 
-def get_train_data():
-    return DataLoader(get_data(True), batch_size=P.train_batch_size, shuffle=True)
-
-
-def get_test_data():
-    return DataLoader(get_data(False), batch_size=P.test_batch_size, shuffle=True)
-
-
-def train(model, loader, optimizer, log_):
-    model.train()
-    log_('Training...')
-    total_loss = 0
-    for batch, (data, target) in enumerate(loader, 1):
-        data, target = Variable(data), Variable(target)
-        optimizer.zero_grad()
-        output = model(data)
-        loss = model.loss(output, target)
-        total_loss += loss.data[0]
-        loss.backward()
-        optimizer.step()
-        if (batch % P.log_interval) == 0:
-            log_('[%d] Average loss: %.4f' % (batch, total_loss / batch))
-    log_('Finished training.')
-    log_('Average loss: %.4f' % (total_loss / len(loader)))
-
-
-def test(model, loader, log_):
-    test_time = datetime.now()
+def test(model, loader):
     model.eval()
-    log_('Testing...')
+    log('Testing...')
     correct = total = 0
     for batch, (data, target) in enumerate(loader, 1):
         data, target = Variable(data), Variable(target)
@@ -85,7 +59,12 @@ def test(model, loader, log_):
         correct += (output.max(1)[1] == target).sum().data[0]
         total += len(target)
         if (batch % P.log_interval) == 0:
-            log_('[%d] Accuracy: %.2f%% (%d/%d)' % (batch, correct * 1e2 / total, correct, total))
-    log_('Finished testing.')
-    log_('Accuracy: %.2f%% (%d/%d)' % (correct * 1e2 / total, correct, total))
-    return test_time, correct, total
+            log('[%d] Accuracy: %.2f%% (%d/%d)' % (batch, correct * 1e2 / total, correct, total))
+    log('Finished testing.')
+    log('Accuracy: %.2f%% (%d/%d)' % (correct * 1e2 / total, correct, total))
+    return correct, total
+
+
+def merge(old, new, alpha):
+    for old, new in zip(old, new):
+        old.data.mul_(alpha).add_(torch.FloatTensor(new * (1 - alpha)).resize_as_(old.data))

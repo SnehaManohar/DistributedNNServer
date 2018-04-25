@@ -3,11 +3,9 @@ from torchvision.transforms import transforms
 
 class Parameters:
     data_dir = 'data'
-    train_data = data_dir + '/train'
-    test_data = data_dir + '/test'
 
-    image_mean = [0.49842002987861633, 0.45849472284317017, 0.3978663980960846]
-    image_std = [0.31304672360420227, 0.26907557249069214, 0.23163224756717682]
+    image_mean = [0.500424, 0.456539, 0.410315]
+    image_std = [0.250922, 0.240401, 0.269415]
     transform = transforms.Compose([
         transforms.Resize(32),
         transforms.CenterCrop(32),
@@ -15,15 +13,11 @@ class Parameters:
         transforms.Normalize(image_mean, image_std)
     ])
 
-    train_batch_size = 32
-    test_batch_size = 32
+    batch_size = 32
 
-    epochs = 0
-    log_interval = 10
-    verbose_pre_training = True
-    verbose_training_request = True
+    log_interval = 4
 
-    merge_ratio = 0.1
+    merge_ratio = 0.9
 
     update_json_time = 10
     test_model_time = 60
