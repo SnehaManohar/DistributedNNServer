@@ -10,8 +10,6 @@ from parameters import Parameters as P
 class Model:
     def __init__(self):
         self.queue = Queue()
-        self.train_request_queue = Queue()
-        self.train_progress_queue = Queue()
         with open('config.json') as config_file:
             self.config = json.load(config_file)
         self.model = NeuralNet(self.config)
