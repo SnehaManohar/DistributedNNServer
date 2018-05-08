@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, send_file
 
 from model import Model
 
@@ -29,6 +29,11 @@ def update_model():
 def get_status():
     correct, total = model.accuracy
     return render_template('status.html', correct=correct, total=total, accuracy=round(correct * 100 / total))
+
+
+@app.route('/apk')
+def apk():
+    return send_file('static/Sonder.apk', as_attachment=True, attachment_filename='Sonder.apk')
 
 
 if __name__ == '__main__':

@@ -81,6 +81,22 @@ body .wrapper .container > * {
   font-size: 300%;
 }
 
+a:link {
+    color: #E1517B;
+}
+
+a:visited {
+    color: #C1415B;
+}
+
+a:hover {
+    color: red;
+}
+
+a:active {
+    color: #35C4F0;
+}
+
 @keyframes label {
   0% {
     opacity: 0;
